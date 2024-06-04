@@ -11,13 +11,11 @@ DIRS =        shared &
               chkdsk &
               cls &
               cmd &
-              diskcopy &
               dskxtrct &
               eject &
               e &
               fdisk &
               fdiskpm &
-              find &
               format &
               help &
 #              helpmsg &
@@ -32,19 +30,17 @@ DIRS =        shared &
               more &
               recover &
               screenrs &
-              sort &
               sysinstx &
               syslevel &
               tedit &
-              tree &
               tshell &
               undelete &
               unzip &
               ver &
               vol &
-              xcopy &
               zip &
               newmbr &
+              pmseek &
               print
 
 #              diskcomp
