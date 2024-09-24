@@ -1,0 +1,352 @@
+diff -urwN somfree/sc/src/sc.c newsomfree/sc/src/sc.c
+--- somfree/sc/src/sc.c	Wed Sep 18 14:50:19 2024
++++ newsomfree/sc/src/sc.c	Wed Sep 18 13:38:53 2024
+@@ -548,7 +548,7 @@
+                                 _IDL_SEQUENCE_char somipc={0,0,NULL};   // SOM IDL Compiler (no Emitter Framework)
+                                 _IDL_SEQUENCE_char somipc2={0,0,NULL};  // SOM IDL Compiler (Emitter Framework)
+                                 _IDL_SEQUENCE_char spp={0,0,NULL};      // SOM OIDL Pre-Processor
+-                                _IDL_SEQUENCE_char somopc={0,0,NULL};   // SOM OIDL Compiler (CSC to IDL converter)
++                                _IDL_SEQUENCE_char somopc={0,0,NULL};   // SOM OIDL Compiler (Emitter Framework)
+                                 _IDL_SEQUENCE_char idlname={0,0,NULL};  // IDL FQFN
+ 				char buf[512];
+ 				item *t;
+@@ -741,23 +741,6 @@
+ 
+ /*					fprintf(stderr,"%s: ir output file is \"%s\"\n",app,filename);*/
+ 
+-#if 0
+-                                        {
+-                                        long attr;
+-
+-					attr=GetFileAttributes(filename);
+-
+-					if (attr < 0)
+-					{
+-						fprintf(stderr,"%s,\"%s\" does not exist\n",app,filename);
+-
+-						if (load_somir(app,filename))
+-						{
+-							return 1;
+-						}
+-					}
+-                                        }
+-#else
+                                         {
+                                         struct stat   buffer;
+ 
+@@ -771,7 +754,7 @@
+                                                 }
+                                         }
+                                         }
+-#endif
++										
+                                         add_str(&somipc2,filename);
+ 					add_str(&somipc,filename);
+                                         add_str(&somipc2," ");
+@@ -969,6 +952,7 @@
+                                         add_seq(&somcpp,&zero);
+                                         add_seq(&somipc2,&zero);
+                                         add_seq(&somipc,&zero);
++					add_seq(&tmpf, &zero);
+ 
+                                         if (verbose)
+                                         {
+@@ -988,11 +972,12 @@
+                                                 printf("%s\n",somipc2._buffer);
+                                         }
+                                         somipcExitCode=system(somipc2._buffer);
++
+                                         #ifdef __LINUX__
+                                         if (somipcExitCode==127)
+                                         #endif
+-#else
+ 
++#else
+                                         if (!(stat(somipc2._buffer, &buffer) == 0))
+ #endif
+                                         {
+diff -urwN somfree/somipc/src/rhbschdr.cpp newsomfree/somipc/src/rhbschdr.cpp
+--- somfree/somipc/src/rhbschdr.cpp	Wed Sep 18 14:50:10 2024
++++ newsomfree/somipc/src/rhbschdr.cpp	Wed Sep 18 12:23:15 2024
+@@ -1248,6 +1248,32 @@
+ 
+ 		generated_types.add(iface);
+ 
++		if (!apiOnlyFlag)
++		{
++			if (cplusplus)
++			{
++				if (internal)
++				{
++					generate_passthru(out,iface,"C_xih_after");
++				}
++				else
++				{
++					generate_passthru(out,iface,"C_xh_after");
++				}
++			}
++			else
++			{
++				if (internal)
++				{
++					generate_passthru(out,iface,"C_ih_after");
++				}
++				else
++				{
++					generate_passthru(out,iface,"C_h_after");
++				}
++			}
++		}
++
+ 		if (!internal)
+ 		{
+ 			generate_somTDs(out,iface,nest);
+@@ -1285,28 +1311,6 @@
+ 
+ 			generate_interface(out,iface,nest);
+ 
+-			if (cplusplus)
+-			{
+-				if (internal)
+-				{
+-					generate_passthru(out,iface,"C_xih_after");
+-				}
+-				else
+-				{
+-					generate_passthru(out,iface,"C_xh_after");
+-				}
+-			}
+-			else
+-			{
+-				if (internal)
+-				{
+-					generate_passthru(out,iface,"C_ih_after");
+-				}
+-				else
+-				{
+-					generate_passthru(out,iface,"C_h_after");
+-				}
+-			}
+ 		}
+ 	}
+ 
+@@ -7196,15 +7200,27 @@
+ {
+ 	RHBelement *el;
+ 	char n[256];
++	const char *p=NULL;
+ 
+-	strncpy(n,"functionprefix",sizeof(n));
+ 	buf[0]=0;
+ 
++	strncpy(n,"functionprefix",sizeof(n));
+ 	el=iface->find_named_element(0,n,sizeof(n));
+ 
+ 	if (el)
+ 	{
+-		const char *p=el->modifier_data.get(0);
++		p=el->modifier_data.get(0);
++	}
++
++	if (!p || !strlen(p))
++	{
++		strncpy(n,"externalprefix",sizeof(n));
++		el=iface->find_named_element(0,n,sizeof(n));
++		if (el)
++		{
++			p=el->modifier_data.get(0);
++		}
++	}
+ 
+ 		if (p)
+ 		{
+@@ -7219,13 +7235,6 @@
+ 				p++;
+ 			}
+ 
+-			*buf=0;
+-		}
+-	}
+-	else
+-	{
+-		/* 31-3-1999 */
+-/*		get_c_name(iface,buf);*/
+ 		*buf=0;
+ 	}
+ }
+diff -urwN somfree/spp/src/note.txt newsomfree/spp/src/note.txt
+--- somfree/spp/src/note.txt	Wed Sep 18 14:50:18 2024
++++ newsomfree/spp/src/note.txt	Wed Sep 18 11:24:38 2024
+@@ -5,9 +5,3 @@
+ to produce spp.c file from flex file
+ 
+ 
+-
+-Seems standard SPP produces not #line pragma, but
+-
+-@ <lineno> "filename" "filename"
+-
+-Need to check how it works.
+diff -urwN somfree/spp/src/spp.c newsomfree/spp/src/spp.c
+diff -urwN somfree/spp/src/spp.l newsomfree/spp/src/spp.l
+--- somfree/spp/src/spp.l	Thu Jan 01 07:00:00 1970
++++ newsomfree/spp/src/spp.l	Wed Sep 18 11:26:14 2024
+@@ -0,0 +1,156 @@
++/**************************************************************************
++ *
++ *  Copyright 2022, Yuri Prokushev
++ *
++ *  This file is part of osFree project
++ *
++ *  This program is free software: you can redistribute it and/or modify it
++ *  under the terms of the GNU Lesser General Public License as published by the
++ *  Free Software Foundation, either version 3 of the License, or (at your
++ *  option) any later version.
++ * 
++ *  This program is distributed in the hope that it will be useful, but WITHOUT
++ *  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
++ *  FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
++ *  more details.
++ *
++ *  You should have received a copy of the GNU Lesser General Public License
++ *  along with this program.  If not, see <http://www.gnu.org/licenses/>
++ *
++ */
++
++/*
++
++  SOM Preprocessor SPP is a original SOM Preprocessor of OIDL files.
++  Tested on all csc/sc files found by me. Not sure it will work as
++  drop-in replacement of original SPP.
++
++  @todo Add passthrow section skip
++  @todo Add loop include control.
++*/
++
++/* the "incl" state is used for picking up the name
++ * of an include file
++ */
++%x incl
++
++%{
++#include <stdlib.h>
++#include <string.h>
++#include <direct.h>
++#include <io.h>
++
++#include <emitlib.h>
++
++#define YY_NEVER_INTERACTIVE 1
++
++#define MAX_INCLUDE_DEPTH 20
++struct {
++  YY_BUFFER_STATE state;
++  char * filename;
++  char * fullfilename;
++  int lineno;
++} include_stack[MAX_INCLUDE_DEPTH];
++int include_stack_ptr = 0;
++%}
++
++%%
++^#include	{ BEGIN(incl); }
++^"include "	{ BEGIN(incl); }
++
++[a-z]+		{ ECHO; }
++[^a-z\n]*\n?	{ ECHO; include_stack[include_stack_ptr].lineno++; }
++
++<incl>[ \t]*	{ /* eat the whitespace */ }
++<incl>[^ \t\n]+	{ /* got the include file name */
++		if (include_stack_ptr >= MAX_INCLUDE_DEPTH)
++		{
++                  fprintf(stderr, "Includes nested too deeply");
++		  exit( 1 );
++		}
++
++		include_stack[include_stack_ptr].state = YY_CURRENT_BUFFER;
++
++		include_stack_ptr++;
++
++		include_stack[include_stack_ptr].filename=strdup(yytext+1);
++		include_stack[include_stack_ptr].filename[strlen(include_stack[include_stack_ptr].filename)-1]=0x0;
++		include_stack[include_stack_ptr].fullfilename=strdup(yytext+1);
++		include_stack[include_stack_ptr].fullfilename[strlen(include_stack[include_stack_ptr].fullfilename)-1]=0x0;
++		if (yytext[0]=='<')
++		{
++		  char fullpath[260];
++		  somtsearchFileSL(include_stack[include_stack_ptr].filename, fullpath, "SMINCLUDE");
++		  free(include_stack[include_stack_ptr].fullfilename);
++		  include_stack[include_stack_ptr].fullfilename=strdup(fullpath);
++		}
++
++		yyin = fopen(include_stack[include_stack_ptr].fullfilename, "r");
++
++		if (!yyin)
++		{
++		  fprintf(stderr, "fopen %s error", include_stack[include_stack_ptr].filename);
++		  exit(1);
++		}
++
++		fprintf(yyout, "@ 1 \"%s\" \"%s\"\n", include_stack[include_stack_ptr].filename, include_stack[include_stack_ptr].fullfilename);
++		yy_switch_to_buffer(yy_create_buffer(yyin, YY_BUF_SIZE));
++
++		BEGIN(INITIAL);
++	   }
++
++<<EOF>> {
++	   if (	--include_stack_ptr < 0	)
++	       {
++	       yyterminate();
++	       }
++
++	   else
++	       {
++		yy_delete_buffer( YY_CURRENT_BUFFER );
++		yy_switch_to_buffer(include_stack[include_stack_ptr].state);
++		fprintf(yyout, "@ %d \"%s\" \"%s\"\n", include_stack[include_stack_ptr].lineno, include_stack[include_stack_ptr].filename, include_stack[include_stack_ptr].filename);
++	       }
++
++	   }
++
++%%
++
++
++int yywrap()
++{
++  return 1;
++}
++
++
++void showVersion()
++{
++  printf("SOM Preprocessor v1.0\n");
++}
++
++void showUsage()
++{
++}
++
++int main(int argc, char *argv[])
++{
++  if (argc)
++  {
++    if (!strcmp(argv[1], "-V")) showVersion();
++  }
++  else
++  {
++    showUsage();
++    return 0;
++  }
++
++  yyin=fopen(argv[1],"r");
++
++  include_stack[include_stack_ptr].filename=strdup(argv[1]);
++  include_stack[include_stack_ptr].fullfilename=strdup(argv[1]);
++  include_stack[include_stack_ptr].lineno=1;
++
++  yylex();
++
++  return 0;
++}
+diff -urwN somfree/spp/src/spp.ll newsomfree/spp/src/spp.ll
+
