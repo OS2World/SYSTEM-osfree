@@ -1,0 +1,10 @@
+diff -urwN somfree/somtk/include/soms.xh newsomfree/somtk/include/soms.xh
+--- somfree/somtk/include/soms.xh	Thu Jan 01 07:00:00 1970
++++ newsomfree/somtk/include/soms.xh	Mon Oct 07 16:18:56 2024
+@@ -0,0 +1,6 @@
++#ifndef soms_xh
++#define soms_xh
++
++#include <soms.h>
++
++#endif

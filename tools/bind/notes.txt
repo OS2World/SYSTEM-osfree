@@ -1,0 +1,32 @@
+questions:
+may be apis.lib for api without dll/vio and apif.lib with dll/vio?
+
+
+
+BIND performs three major steps:
+ 
+1. For imported functions, BIND reads the dynamic-link entry
+   points from the OS/2 executable file. For each function, BIND
+   writes an EXTDEF object record to a temporary object file.
+   Each EXTDEF record is associated with an external reference
+   that the linker must resolve.
+
+2. BIND uses WLINK to link the executable file, the temporary
+   object file, the API.LIB file, and any other libraries
+   specified on the BIND command line.
+
+   The API.LIB library file supplies a stub loader module. This
+   module loads the OS/2 executable file in a DOS environment
+   and simulates the OS/2 startup conditions. API.LIB also
+   supplies code that emulates the OS/2 Family API (Family
+   Application Program Interface) in a DOS environment.
+
+3. BIND merges the OS/2 protected-mode and DOS real-mode executable files
+   into a single file that runs in either mode.
+
+BIND searches for API.LIB and OS2.LIB in the directories specified
+by the LIB environment variable. If you have not set the LIB
+variable, or if API.LIB or OS2.LIB reside elsewhere, enter a full
+path name in the <linklibs> field.
+	 
+

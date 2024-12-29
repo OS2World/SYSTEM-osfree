@@ -87,6 +87,17 @@ extern "C" {
 #define NE_DOS4         0x3
 #define NE_DEV386       0x4
 
+/*
+00h unknown
+		01h OS/2
+		02h Windows
+		03h European MS-DOS 4.x
+		04h Windows 386
+		05h BOSS (Borland Operating System Services)
+		81h PharLap 286|DOS-Extender, OS/2
+		82h PharLap 286|DOS-Extender, Windows
+*/
+
 /* Flag word values */ 
 #define NENOTP          0x8000
 #define NENOTMPSAFE     0x4000
@@ -242,7 +253,10 @@ struct new_exe {
     BYTE	ne_exetyp;				/* Executable type, used by loader.
 									   02h = WINDOWS */
     BYTE	ne_flagsothers;			/* Operating system flags */
-    char	ne_res[NERESBYTES];		/* Reserved */ 
+    HANDLE  dlls_to_init;     /* 38 List of DLLs to initialize (ne_pretthunks on disk) */
+    HANDLE  nrname_handle;    /* 3a Handle to non-resident name table (ne_psegrefbytes on disk) */
+    WORD    ne_swaparea;      /* 3c Min. swap area size */
+    WORD    ne_expver;        /* 3e Expected Windows version */
 };
 
 // On-disk segment entry
@@ -265,7 +279,7 @@ struct new_seg1 {
     WORD  ns1_flags;				/* Flag word */
     WORD  ns1_minalloc;				/* Minimum allocation size of the segment, in bytes. Total size
 									   of the segment. Zero means 64K */
-    WORD  ns1_handle;				/* Selector or handle (selector - 1) of segment in memory */
+    HGLOBAL  ns1_handle;				/* Selector or handle (selector - 1) of segment in memory */
 };
 
 struct new_segdata {
@@ -317,7 +331,7 @@ struct new_rlc {
 #define NR_OSTYPE(x)    (x).nr_union.nr_osfix.nr_ostype
 #define NR_OSRES(x)     (x).nr_union.nr_osfix.nr_osres
 
-#define NRSTYP      0x0f
+#define NRSTYP      0x0f	// Mask of source type
 #define NRSBYT      0x00
 #define NRSSEG      0x02
 #define NRSPTR      0x03
@@ -327,11 +341,13 @@ struct new_rlc {
 #define NRSOFF32    0x08
 
 #define NRADD       0x04
-#define NRRTYP      0x03
+#define NRRTYP      0x03	// Mask of relocation type
+
 #define NRRINT      0x00
 #define NRRORD      0x01
 #define NRRNAM      0x02
 #define NRROSF      0x03
+
 #define NRICHAIN    0x08
 
 #if (EXE386 == 0)

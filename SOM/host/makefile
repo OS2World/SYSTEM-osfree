@@ -12,8 +12,9 @@ WATCOM_RUNTIME = clbr19
 SOM_COMPILER = &
   pdl sc somcpp somipc somenv &
   somxh somstars somcorba somhh &
-  somkpub idl somcprep genh genxh &
+  somkpub idl idl2 somcprep genh genxh &
 !ifneq %HOST linux
+  ctoi newemit &
   somc &
   spp &
   somopc &

@@ -1,11 +1,11 @@
 os2tk45\som\bin
 
-ctoi.cmd
+ctoi.cmd		+
 irdump.exe
 pdl.exe			+
 sc.exe			+
 scobj.exe
-somcorba.cmd		+
+somcorba.cmd	+
 somcpp.exe		+
 somdeps.exe
 somdeps1.exe
@@ -15,7 +15,7 @@ somhh.cmd		+
 somipc.exe		+
 somopc.exe		+
 somsetup.exe
-somstars.cmd		+
+somstars.cmd	+
 somtempl.exe
 somtempl.ps
 somtempl.txt
@@ -65,31 +65,31 @@ somtk.lib		+
 os2tk45\som\include
 
 attribdf.h		+
-attribdf.idl		+
+attribdf.idl	+
 attribdf.xh		+
 boa.h			+
 boa.idl			+
 boa.xh			+
 brs.efw
 clientev.h		+
-clientev.idl		+
+clientev.idl	+
 clientev.xh		+
 cntxt.h			+
 cntxt.idl		+
 cntxt.xh		+
 constdef.h		+
-constdef.idl		+
+constdef.idl	+
 constdef.xh		+
 containd.h		+
-containd.idl		+
+containd.idl	+
 containd.xh		+
 containr.h		+
-containr.idl		+
+containr.idl	+
 containr.xh		+
 cpp.efw
 ctm.efw
 defedidl.h		+
-defedidl.idl		+
+defedidl.idl	+
 defedidl.xh		+
 eda.h			+
 eda.idl			+
@@ -99,7 +99,7 @@ eman.idl		+
 eman.xh			+
 emitlib.h		+
 emregdat.h		+
-emregdat.idl		+
+emregdat.idl	+
 emregdat.xh		+
 emtypes.h		+
 event.h			+
@@ -107,7 +107,7 @@ event.idl		+
 event.xh		+
 eventmsk.h		+
 excptdef.h		+
-excptdef.idl		+
+excptdef.idl	+
 excptdef.xh		+
 fma.h			+
 fma.idl			+
@@ -124,23 +124,23 @@ fsagm.xh		+
 fsgm.h			+
 fsgm.idl		+
 fsgm.xh			+
-gen_c.efc
-gen_c.efs
-gen_c.efw
-gen_cpp.efw
-gen_def.efw
-gen_emit.efc
-gen_emit.efs
-gen_emit.efw
-gen_emit.efx
-gen_idl.efw
-gen_make.efc
-gen_make.efs
-gen_make.efw
-gen_mk32.efc
-gen_mk32.efs
-gen_mk32.efw
-gen_temp.efw
+gen_c.efc				// CORBA version
+gen_c.efs				// SOM version
+gen_c.efw		+		// Current version
+gen_cpp.efw		+
+gen_def.efw		+
+gen_emit.efc			// CORBA version
+gen_emit.efs			// SOM version
+gen_emit.efw	+   	// Current version - switched by somcorba.cmd. Name changed to gen_emit_c.efw
+gen_emit.efx	+   	// Name changed to gen_emit_cpp.efw
+gen_idl.efw		+
+gen_make.efc			// CORBA version
+gen_make.efs			// SOM version
+gen_make.efw			// Current version - switched by somcorba.cmd
+gen_mk32.efc			// CORBA version
+gen_mk32.efs			// SOM version
+gen_mk32.efw			// Current version - switched by somcorba.cmd
+gen_temp.efw	+
 idl.efw
 impldef.h		+
 impldef.idl		+
@@ -149,7 +149,7 @@ implrep.h		+
 implrep.idl		+
 implrep.xh		+
 intfacdf.h		+
-intfacdf.idl		+
+intfacdf.idl	+
 intfacdf.xh		+
 iogma.h			+
 iogma.idl		+
@@ -173,10 +173,10 @@ mia.h			+
 mia.idl			+
 mia.xh			+
 mlink.h
-mlink.idl
+mlink.idl		+
 mlink.xh
 moduledf.h		+
-moduledf.idl		+
+moduledf.idl	+
 moduledf.xh		+
 morder.h
 morder.idl
@@ -200,13 +200,13 @@ om.h			+
 om.idl			+
 om.xh			+
 operatdf.h		+
-operatdf.idl		+
+operatdf.idl	+
 operatdf.xh		+
 orb.h			+
 orb.idl			+
 orb.xh			+
 paramdef.h		+
-paramdef.idl		+
+paramdef.idl	+
 paramdef.xh		+
 pid.h			+
 pid.idl			+
@@ -221,7 +221,7 @@ poida.h			+
 poida.idl		+
 poida.xh		+
 principl.h		+
-principl.idl		+
+principl.idl	+
 principl.xh		+
 psma.h			+
 psma.idl		+
@@ -230,13 +230,13 @@ replicbl.h
 replicbl.idl
 replicbl.xh
 repostry.h		+
-repostry.idl		+
+repostry.idl	+
 repostry.xh		+
 request.h		+
 request.idl		+
 request.xh		+
 scattrib.h		+
-scattrib.idl		+
+scattrib.idl	+
 scattrib.xh		+
 scbase.h		+
 scbase.idl		+
@@ -245,7 +245,7 @@ scclass.h		+
 scclass.idl		+
 scclass.xh		+
 sccommon.h		+
-sccommon.idl		+
+sccommon.idl	+
 sccommon.xh		+
 scconst.h		+
 scconst.idl		+
@@ -263,16 +263,16 @@ scenum.h		+
 scenum.idl		+
 scenum.xh		+
 scenumnm.h		+
-scenumnm.idl		+
+scenumnm.idl	+
 scenumnm.xh		+
 scmeta.h		+
 scmeta.idl		+
 scmeta.xh		+
 scmethod.h		+
-scmethod.idl		+
+scmethod.idl	+
 scmethod.xh		+
 scmodule.h		+
-scmodule.idl		+
+scmodule.idl	+
 scmodule.xh		+
 scparm.h		+
 scparm.idl		+
@@ -281,13 +281,13 @@ scpass.h		+
 scpass.idl		+
 scpass.xh		+
 scseqnce.h		+
-scseqnce.idl		+
+scseqnce.idl	+
 scseqnce.xh		+
 scstring.h		+
-scstring.idl		+
+scstring.idl	+
 scstring.xh		+
 scstruct.h		+
-scstruct.idl		+
+scstruct.idl	+
 scstruct.xh		+
 sctdef.h		+
 sctdef.idl		+
@@ -300,7 +300,7 @@ scunion.h		+
 scunion.idl		+
 scunion.xh		+
 scusrtyp.h		+
-scusrtyp.idl		+
+scusrtyp.idl	+
 scusrtyp.xh		+
 servmgr.h		+
 servmgr.idl		+
@@ -311,7 +311,7 @@ sinkev.xh		+
 sm.h			+
 smcidl.h		+
 snglicls.h		+
-snglicls.idl		+
+snglicls.idl	+
 snglicls.xh		+
 som.h			+
 som.hc
@@ -320,7 +320,7 @@ som.hs
 som.xh			+
 somapi.h		+
 sombacls.h		+
-sombacls.idl		+
+sombacls.idl	+
 sombacls.xh		+
 sombtype.h		+
 somcd.h
@@ -340,7 +340,7 @@ somd.h			+
 somd.hh
 somd.xh			+
 somdcprx.h		+
-somdcprx.idl		+
+somdcprx.idl	+
 somdcprx.xh		+
 somdebug.h
 somderr.h		+
@@ -352,10 +352,10 @@ somdom.h		+
 somdom.idl		+
 somdom.xh		+
 somdserv.h		+
-somdserv.idl		+
+somdserv.idl	+
 somdserv.xh		+
 somdtype.h		+
-somdtype.idl		+
+somdtype.idl	+
 somdtype.xh		+
 somh.hh
 somida.h		+
@@ -381,14 +381,14 @@ somperr.h		+
 somperr.idl		+
 somperr.xh		+
 somperrd.h		+
-somperrd.idl		+
+somperrd.idl	+
 somperrd.xh		+
 somport.h
 sompstad.h		+
-sompstad.idl		+
+sompstad.idl	+
 sompstad.xh		+
 sompstat.h		+
-sompstat.idl		+
+sompstat.idl	+
 sompstat.xh		+
 somr.h
 somr.idl
@@ -406,12 +406,12 @@ somrmcls.h
 somrmcls.idl
 somrmcls.xh
 soms.h			+
-soms.xh
+soms.xh			+
 somsid.h		+
 somsid.idl		+
 somsid.xh		+
 somssock.h		+
-somssock.idl		+
+somssock.idl	+
 somssock.xh		+
 somstrt.h		+
 somstrt.idl		+
@@ -484,10 +484,10 @@ titeratr.h
 titeratr.idl
 titeratr.xh
 tpll.h
-tpll.idl
+tpll.idl		+
 tpll.xh
 tpllitr.h
-tpllitr.idl
+tpllitr.idl		+
 tpllitr.xh
 tpq.h
 tpq.idl
@@ -523,6 +523,30 @@ workprev.h		+
 workprev.idl		+
 workprev.xh		+
 
+os2tk45\som\common\dll:
+somd.dll
+som.dll			+
+somem.dll
+somir.dll
+soms.dll
+somsec.dll
+somst32.dll
+somst.dll
+somtc.dll
+somuc.dll
+somu.dll
+
+os2tk45\som\common\system:
+somd.msg
+some_os2.msg
+somk.msg		+
+somr_os2.msg
+somucos2.msg
+srgc_os2.msg
+
+ps2tk45\som\msg:
+somc.msg		+
+
 extra:
 poa.idl
 rhborbst.idl
@@ -552,12 +576,15 @@ xmscssae.idl
 somtdm.idl
 emtypes.xh
 eventmsk.xh
+newemit.com
 
+
+Placement in OS/2 tree
 
 Directory	Name		Comments
 \OS2		SOMDD.EXE	DSOM daemon. It must be started prior to running a DSOM application
 		SOMDSVR.EXE	Generic DSOM server program
-\OS2\DLL	SOM.DLL		SOM Run-time Library
+\OS2\DLL	+ SOM.DLL		SOM Run-time Library
 		SOMD.DLL	Distributed SOM (DSOM)
 		SOMEM.DLL	SOM Event Manager
 		SOMIR.DLL	CORBA Interface Repository support
@@ -573,9 +600,13 @@ Directory	Name		Comments
 		SOMDIMPL.TOC	Distributed SOM implementation index
 \OS2\SYSTEM	SOMD.MSG	Messages for SOMD.DLL
 		SOME_OS2.MSG	
-		SOMK.MSG	SOM error messages file
+		+SOMK.MSG	SOM Kernel error messages file
 
 
 somc.dll exports
 
 IBM SOM 2 and IBM SOM 3 ordinals is differ. Seems all imports by name...
+
+
+=========================
+
