@@ -19,8 +19,14 @@ DEST     = os2$(SEP)mdos
 
 !ifeq COM 1
 comf = com
+!ifndef EXT
+EXT = com
+!endif
 !else ifeq RAW 1
 comf = com
+!ifndef EXT
+EXT = bin
+!endif
 !else
 comf = 
 !endif
@@ -28,9 +34,9 @@ comf =
 !ifeq DLL 1
 TARGETS  = $(PATH)$(PROJ).dll # $(PATH)$(PROJ).sym
 !else ifeq COM 1
-TARGETS  = $(PATH)$(PROJ).com # $(PATH)$(PROJ).sym
+TARGETS  = $(PATH)$(PROJ).$(EXT) # $(PATH)$(PROJ).sym
 !else ifeq RAW 1
-TARGETS  = $(PATH)$(PROJ).bin # $(PATH)$(PROJ).sym
+TARGETS  = $(PATH)$(PROJ).$(EXT) # $(PATH)$(PROJ).sym
 !else
 TARGETS  = $(PATH)$(PROJ).exe # $(PATH)$(PROJ).sym
 !endif
@@ -42,8 +48,8 @@ TARGETS  = $(PATH)$(PROJ).exe # $(PATH)$(PROJ).sym
 $(PATH)$(PROJ).lnk: $(OBJS) $(MYDIR)makefile .always
  @%create $^@
  @%append $^@ FORMAT dos $(comf)
-!ifeq RAW 1
- @%append $^@ NAME $^*.bin
+!ifdef EXT
+ @%append $^@ NAME $^*.$(EXT)
 !else
  @%append $^@ NAME $^*
 !endif
@@ -63,11 +69,11 @@ $(PATH)$(PROJ).lnk: $(OBJS) $(MYDIR)makefile .always
  @%append $^@ OPTION MAP=$^*.wmp
  $(ADDFILES_CMD)
 
-$(PATH)$(TRGT): $(PATH)$(PROJ).lnk
- @$(SAY) LINK     $^. $(LOG)
- $(verbose)$(LINKER) $(LINKOPT) @$[@ $(LOG2)
+#$(PATH)$(TRGT): $(PATH)$(PROJ).lnk
+# @$(SAY) LINK     $^. $(LOG)
+# $(verbose)$(LINKER) $(LINKOPT) @$[@ $(LOG2)
 
-$(PATH)$(PROJ).bin: $(PATH)$(PROJ).lnk
+$(PATH)$(PROJ).$(EXT): $(PATH)$(PROJ).lnk
  @$(SAY) LINK     $^. $(LOG)
  @$(verbose)$(LINKER) $(LINKOPT) @$[@ $(LOG2)
 
